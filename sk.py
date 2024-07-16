@@ -46,16 +46,7 @@ tform = transform.AffineTransform(matrix=matrix)
 # Apply the transformation
 transformed_image = transform.warp(image, tform.inverse)
 
-# Display the original and transformed images
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
-
-ax1.imshow(image)
-ax1.set_title("Original Image")
-ax1.axis("off")
-
-ax2.imshow(transformed_image)
-ax2.set_title("Transformed Image")
-ax2.axis("off")
-
-plt.tight_layout()
-plt.show()
+# Save the transformed image
+output_path = "transformed_image.png"
+io.imsave(output_path, (transformed_image * 255).astype(np.uint8))
+print(f"Transformed image saved as {output_path}")
