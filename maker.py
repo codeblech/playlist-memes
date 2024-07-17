@@ -4,6 +4,8 @@ from PIL import Image
 import json
 import numpy as np
 from datetime import datetime
+import os
+from pathlib import Path
 
 
 def read_metadata(input_path: str) -> dict | None:
@@ -17,6 +19,7 @@ def read_metadata(input_path: str) -> dict | None:
     """
     with Image.open(input_path) as img:
         if metadata := json.loads(img.info.get("metadata", None)):
+            print(metadata)
             return metadata
         else:
             return None
@@ -36,35 +39,69 @@ def get_transformation_matrix(metadata: dict) -> list[float]:
     return matrix
 
 
-def apply_overlay_transformation(background_path, overlay_path, save_transformed_overlay=False):
+def apply_overlay_transformation(
+    background_path, overlay_path, save_transformed_overlay=False
+) -> Path | None:
     metadata = read_metadata(background_path)
     if metadata is None:
         print("No Metadata present in given background image")
         return
+
     matrix = get_transformation_matrix(metadata=metadata)
 
-    overlay = io.imread(overlay_path, as_gray=False, plugin="pil")
-    if overlay.shape[2] == 3:  # If image doesn't have an alpha channel, add one
-        overlay = np.dstack((overlay, np.ones(overlay.shape[:2], dtype=np.uint8) * 255))
+    # Open background and overlay images
+    background = Image.open(background_path)
+    overlay = Image.open(overlay_path)
+
+    # Convert overlay to RGBA if it's not already
+    if overlay.mode != "RGBA":
+        overlay = overlay.convert("RGBA")
+
+    # Create a new transparent image with the same size as the background
+    padded_overlay = Image.new("RGBA", background.size, (0, 0, 0, 0))
+
+    # Calculate position to paste the overlay (centered)
+
+    # Paste the overlay onto the padded image
+    padded_overlay.paste(overlay, (0, 0), overlay)
+
+    # Convert to numpy array for transformation
+    overlay_array = np.array(padded_overlay)
 
     tform = transform.AffineTransform(matrix=matrix)
-
     transformed_overlay = transform.warp(
-        overlay, tform.inverse, order=0, preserve_range=True
+        overlay_array, tform.inverse, order=0, preserve_range=True
     )
     transformed_overlay = transformed_overlay.astype(np.uint8)
-
     transformed_img = Image.fromarray(transformed_overlay)
+
     if save_transformed_overlay:
         transformed_img.save("transformed_overlay.png")
 
-    output_name = datetime.now().strftime("%Y-%m-%d-%H-%M-%S-%f") + ".png"
-    with Image.open(background_path) as bg:
-        bg.paste(transformed_img, (0, 0), transformed_img)
-        bg.save(output_name, "PNG")
+    current_time = datetime.now().strftime("%Y-%m-%d-%H-%M-%S-%f") + ".png"
+    # Extracting the base filenames without extensions
+    overlay_filename = os.path.basename(overlay_path).split(".")[0]
+    background_filename = os.path.basename(background_path).split(".")[0]
+
+    output_name = f"{overlay_filename}_o_{background_filename}_t_{current_time}.png"
+    output_path = "./outputs/" + output_name
+
+    try:
+        background.paste(transformed_img, (0, 0), transformed_img)
+        background.save(output_path, "PNG")
+        return Path(output_path)
+    except Exception as e:
+        print(f"Error saving output: {e}")
+        return None
 
 
 if __name__ == "__main__":
-    background = "assets/background/1/photo_2024-07-15_01-07-27.png"
+    background = "assets/background/1/2024-07-17-13-44-44-327972.png"
     overlay = "assets/overlay/3p19TG5Qia8j2XXL.jpg"
-    apply_overlay_transformation(background, overlay)
+    result = apply_overlay_transformation(
+        background, overlay, save_transformed_overlay=True
+    )
+    if result:
+        print(f"Output saved to: {result}")
+    else:
+        print("Failed to generate output")
