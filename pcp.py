@@ -7,7 +7,6 @@ import json
 from typing_extensions import Annotated
 from datetime import datetime
 app = typer.Typer()
-import os
 
 
 def validate_image(ctx: typer.Context, file_path: Path):
