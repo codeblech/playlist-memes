@@ -38,6 +38,7 @@ def get_transformation_matrix(metadata: dict) -> list[float]:
     print(matrix)
     return matrix
 
+
 def has_mask(metadata: dict) -> bool:
     x = metadata.get("has_mask")
     print(f"x: {x}")
@@ -47,9 +48,7 @@ def has_mask(metadata: dict) -> bool:
         return False
 
 
-def apply_overlay_transformation(
-    background_path, overlay_path, save_transformed_overlay=False
-) -> Path | None:
+def apply_overlay_transformation(background_path, overlay_path) -> Path | None:
     metadata = read_metadata(background_path)
     if metadata is None:
         print("No Metadata present in given background image")
@@ -85,9 +84,6 @@ def apply_overlay_transformation(
     transformed_overlay = transformed_overlay.astype(np.uint8)
     transformed_img = Image.fromarray(transformed_overlay)
 
-    if save_transformed_overlay:
-        transformed_img.save("transformed_overlay.png")
-
     current_time = datetime.now().strftime("%Y-%m-%d-%H-%M-%S-%f") + ".png"
     # Extracting the base filenames without extensions
     overlay_filename = os.path.basename(overlay_path).split(".")[0]
@@ -95,6 +91,36 @@ def apply_overlay_transformation(
 
     output_name = f"{overlay_filename}_o_{background_filename}_t_{current_time}.png"
     output_path = "./outputs/" + output_name
+
+    if has_mask(metadata=metadata):
+        bg_directory = os.path.dirname(background_path)
+        mask_folder_path = os.path.join(bg_directory, "mask")
+        mask_filename = os.path.basename(background_path).split(".")[0] + "__mask.png"
+        mask_path = os.path.join(mask_folder_path, mask_filename)
+
+        mask = Image.open(mask_path)
+        mask = mask.convert("L")
+        padded_mask = Image.new("L", background.size, 0)
+        padded_mask.paste(mask, (0, 0), mask)
+        mask_array = np.array(padded_mask)
+        transformed_mask = transform.warp(
+            mask_array,
+            tform.inverse,
+            order=0,
+            preserve_range=True,
+        )
+        transformed_mask = transformed_mask.astype(np.uint8)
+        transformed_mask_image = Image.fromarray(transformed_mask, mode="L")
+
+        transformed_img = Image.composite(
+            transformed_img,
+            Image.new("RGBA", transformed_img.size, (0, 0, 0, 0)),
+            transformed_mask_image,
+        )
+
+        # the below method works for pasting with mask, might come in handy in later tweaks
+        # though, i haven't tested it for images with no mask
+        # background = Image.alpha_composite(background.convert("RGBA"), transformed_img)
 
     try:
         background.paste(transformed_img, (0, 0), transformed_img)
@@ -106,11 +132,9 @@ def apply_overlay_transformation(
 
 
 if __name__ == "__main__":
-    background = "assets/background/1/pope.png"
-    overlay = "assets/overlay/AUacb2ai-pAH-iDl.jpg"
-    result = apply_overlay_transformation(
-        background, overlay, save_transformed_overlay=True
-    )
+    background = "assets/background/1/ahshit.png"
+    overlay = "assets/overlay/OZDRi0rIal6gra5j.jpg"
+    result = apply_overlay_transformation(background, overlay)
     if result:
         print(f"Output saved to: {result}")
     else:
