@@ -6,6 +6,7 @@ from PIL.PngImagePlugin import PngInfo
 import json
 from typing_extensions import Annotated
 from datetime import datetime
+
 app = typer.Typer()
 
 
@@ -48,9 +49,9 @@ def addTextChunk(
             readable=True,
             resolve_path=True,
         ),
-    ]
+    ],
 ):
-    with open(metadata_file, 'r') as f:
+    with open(metadata_file, "r") as f:
         metadata = json.load(f)
 
     metadata_str = json.dumps(metadata)
@@ -88,11 +89,12 @@ def readTextChunk(
 ):
     with Image.open(image_path) as img:
         metadata = json.loads(img.info["metadata"])
+        pprint(metadata)
         matrices = metadata.get("transformation_matrices")
         if matrices is not None:
-            matrix = matrices[0]
-            a, b, c, d, e, f, g, h, i = matrix
-        pprint(matrix)
+            for matrix in matrices:
+                a, b, c, d, e, f, g, h, i = matrix
+                pprint(matrix)
 
 
 if __name__ == "__main__":

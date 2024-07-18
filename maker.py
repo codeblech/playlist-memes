@@ -133,21 +133,21 @@ def apply_overlay_transformation(background_path, overlay_path):
         return None
 
 
-def apply_overlay_transformation_v2(background_path, overlay_path_list):
+def apply_overlay_transformation_v2(background_path, overlay_paths):
     metadata = read_metadata(background_path)
     if metadata is None:
         print("No Metadata present in given background image")
         return
     transformation_matrices = get_transformation_matrices(metadata=metadata)
 
-    if len(transformation_matrices) != len(overlay_path_list):
+    if len(transformation_matrices) != len(overlay_paths):
         print("Incompatible arguments provided")
         print(f"Number of transformation matrices: {len(transformation_matrices)}")
-        print(f"Number of overlay images: {len(overlay_path_list)}")
+        print(f"Number of overlay images: {len(overlay_paths)}")
         return None
 
     background = Image.open(background_path)
-    for matrix, overlay_path in zip(transformation_matrices, overlay_path_list):
+    for matrix, overlay_path in zip(transformation_matrices, overlay_paths):
         # Open background and overlay images
         overlay = Image.open(overlay_path)
 
@@ -185,7 +185,7 @@ def apply_overlay_transformation_v2(background_path, overlay_path_list):
     # Extracting the base filenames without extensions
     background_filename = os.path.basename(background_path).split(".")[0]
     print(f"background_filename: {background_filename}")
-    output_name = f"{len(overlay_path_list)}_o_{background_filename}_t_{current_time}"
+    output_name = f"{len(overlay_paths)}_o_{background_filename}_t_{current_time}"
     output_path = os.path.join("outputs", output_name)
     os.makedirs("outputs", exist_ok=True)
 
