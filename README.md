@@ -1,6 +1,5 @@
 # WTF is this
-this is a meme generator for making repeatable memes. The simple background+overlay type of memes. It also supports masking.
-
+This is a meme generator. Paste the links of you favourite songs, and generate loads of memes in one click.
 
 # How to add more templates?
 
@@ -86,7 +85,8 @@ Example: the template is named `beach.png`, name the mask as `beach__mask.png`
 ### Future
 - add GitHubs Actions check to check if a new template added is saved to the correct folder.
 - add metadata to more images from `assets/background/no-metadata`
-- overlay_count might be incorrect in some images. Though it is not used right now for anything
+- `overlay_count` might be incorrect in some images. Though it is not used right now for anything
 - Add caching
 - Improve speed
 - Improve layout
+- Add YouTube, Spotify support
