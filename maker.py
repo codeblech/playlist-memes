@@ -1,11 +1,9 @@
-import skimage as ski
-from skimage import io, transform
+from skimage import transform
 from PIL import Image
 import json
 import numpy as np
 from datetime import datetime
 import os
-from pathlib import Path
 
 
 def read_metadata(input_path: str) -> dict | None:
@@ -25,18 +23,21 @@ def read_metadata(input_path: str) -> dict | None:
             return None
 
 
-def get_transformation_matrix(metadata: dict) -> list[float]:
-    """Extracts the transformation matrix from the metadata dictionary.
-
-    Args:
-        metadata (dict): metadata dictionary
-
-    Returns:
-        list[float]: transformation matrix
-    """
+def get_transformation_matrix(metadata: dict):
     matrix = np.array(metadata["transformation_matrices"][0]).reshape(3, 3)
     print(matrix)
     return matrix
+
+
+def get_transformation_matrices(metadata: dict):
+    matrices = np.array(
+        [
+            np.array(matrix_data).reshape(3, 3)
+            for matrix_data in metadata["transformation_matrices"]
+        ]
+    )
+    print(matrices)
+    return matrices
 
 
 def has_mask(metadata: dict) -> bool:
@@ -48,7 +49,7 @@ def has_mask(metadata: dict) -> bool:
         return False
 
 
-def apply_overlay_transformation(background_path, overlay_path) -> Path | None:
+def apply_overlay_transformation(background_path, overlay_path):
     metadata = read_metadata(background_path)
     if metadata is None:
         print("No Metadata present in given background image")
@@ -89,8 +90,9 @@ def apply_overlay_transformation(background_path, overlay_path) -> Path | None:
     overlay_filename = os.path.basename(overlay_path).split(".")[0]
     background_filename = os.path.basename(background_path).split(".")[0]
 
-    output_name = f"{overlay_filename}_o_{background_filename}_t_{current_time}.png"
-    output_path = "./outputs/" + output_name
+    output_name = f"{overlay_filename}_o_{background_filename}_t_{current_time}"
+    output_path = os.path.join("outputs", output_name)
+    os.makedirs("outputs", exist_ok=True)
 
     if has_mask(metadata=metadata):
         bg_directory = os.path.dirname(background_path)
@@ -125,16 +127,76 @@ def apply_overlay_transformation(background_path, overlay_path) -> Path | None:
     try:
         background.paste(transformed_img, (0, 0), transformed_img)
         background.save(output_path, "PNG")
-        return Path(output_path)
+        return output_path
     except Exception as e:
         print(f"Error saving output: {e}")
         return None
 
 
+def apply_overlay_transformation_v2(background_path, overlay_path_list):
+    metadata = read_metadata(background_path)
+    if metadata is None:
+        print("No Metadata present in given background image")
+        return
+    transformation_matrices = get_transformation_matrices(metadata=metadata)
+
+    if len(transformation_matrices) != len(overlay_path_list):
+        print("Incompatible arguments provided")
+        print(f"Number of transformation matrices: {len(transformation_matrices)}")
+        print(f"Number of overlay images: {len(overlay_path_list)}")
+        return None
+
+    background = Image.open(background_path)
+    for matrix, overlay_path in zip(transformation_matrices, overlay_path_list):
+        # Open background and overlay images
+        overlay = Image.open(overlay_path)
+
+        # Convert overlay to RGBA if it's not already
+        if overlay.mode != "RGBA":
+            overlay = overlay.convert("RGBA")
+
+        # Create a new transparent image with the same size as the background
+        padded_overlay = Image.new("RGBA", background.size, (0, 0, 0, 0))
+
+        # Paste the overlay onto the padded image
+        padded_overlay.paste(overlay, (0, 0), overlay)
+
+        # Convert to numpy array for transformation
+        overlay_array = np.array(padded_overlay)
+
+        # Use ProjectiveTransform instead of AffineTransform
+        tform = transform.ProjectiveTransform(matrix=matrix)
+        transformed_overlay = transform.warp(
+            overlay_array,
+            tform.inverse,
+            order=0,
+            preserve_range=True,
+        )
+        transformed_overlay = transformed_overlay.astype(np.uint8)
+        transformed_img = Image.fromarray(transformed_overlay)
+
+        try:
+            background.paste(transformed_img, (0, 0), transformed_img)
+        except Exception as e:
+            print(f"Error pasting overlay {overlay_path} on background {background_path}: {e}")
+            return None
+
+    current_time = datetime.now().strftime("%Y-%m-%d-%H-%M-%S-%f") + ".png"
+    # Extracting the base filenames without extensions
+    background_filename = os.path.basename(background_path).split(".")[0]
+    print(f"background_filename: {background_filename}")
+    output_name = f"{len(overlay_path_list)}_o_{background_filename}_t_{current_time}"
+    output_path = os.path.join("outputs", output_name)
+    os.makedirs("outputs", exist_ok=True)
+
+    background.save(output_path, "PNG")
+    return output_path
+
+
 if __name__ == "__main__":
-    background = "assets/background/1/ahshit.png"
-    overlay = "assets/overlay/OZDRi0rIal6gra5j.jpg"
-    result = apply_overlay_transformation(background, overlay)
+    background = "assets/background/2/500summer-2.png"
+    overlays = ["assets/overlay/helloworld.jpg", "assets/overlay/-MlfPaA9EIqt5KEa.jpg"]
+    result = apply_overlay_transformation_v2(background, overlays)
     if result:
         print(f"Output saved to: {result}")
     else:

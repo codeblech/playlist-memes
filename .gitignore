@@ -1,2 +1,4 @@
 env/
+overlay/
+outputs/
 .vscode/settings.json
