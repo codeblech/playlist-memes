@@ -34,9 +34,17 @@ def get_transformation_matrix(metadata: dict) -> list[float]:
     Returns:
         list[float]: transformation matrix
     """
-    a0, a1, a2, b0, b1, b2, _, _, _ = metadata["transformation_matrices"][0]
-    matrix = np.array([[a0, a1, a2], [b0, b1, b2], [0, 0, 1]])
+    matrix = np.array(metadata["transformation_matrices"][0]).reshape(3, 3)
+    print(matrix)
     return matrix
+
+def has_mask(metadata: dict) -> bool:
+    x = metadata.get("has_mask")
+    print(f"x: {x}")
+    if x is True:
+        return True
+    else:
+        return False
 
 
 def apply_overlay_transformation(
@@ -60,17 +68,19 @@ def apply_overlay_transformation(
     # Create a new transparent image with the same size as the background
     padded_overlay = Image.new("RGBA", background.size, (0, 0, 0, 0))
 
-    # Calculate position to paste the overlay (centered)
-
     # Paste the overlay onto the padded image
     padded_overlay.paste(overlay, (0, 0), overlay)
 
     # Convert to numpy array for transformation
     overlay_array = np.array(padded_overlay)
 
-    tform = transform.AffineTransform(matrix=matrix)
+    # Use ProjectiveTransform instead of AffineTransform
+    tform = transform.ProjectiveTransform(matrix=matrix)
     transformed_overlay = transform.warp(
-        overlay_array, tform.inverse, order=0, preserve_range=True
+        overlay_array,
+        tform.inverse,
+        order=0,
+        preserve_range=True,
     )
     transformed_overlay = transformed_overlay.astype(np.uint8)
     transformed_img = Image.fromarray(transformed_overlay)
@@ -96,8 +106,8 @@ def apply_overlay_transformation(
 
 
 if __name__ == "__main__":
-    background = "assets/background/1/2024-07-17-13-44-44-327972.png"
-    overlay = "assets/overlay/3p19TG5Qia8j2XXL.jpg"
+    background = "assets/background/1/pope.png"
+    overlay = "assets/overlay/AUacb2ai-pAH-iDl.jpg"
     result = apply_overlay_transformation(
         background, overlay, save_transformed_overlay=True
     )
