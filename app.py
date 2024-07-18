@@ -36,4 +36,4 @@ if st.button(label="Generate Memes", disabled=len(urls) != n, type="primary"):
                 output_image = img_path
 
             if output_image:
-                st.image(img_path, width=512)
+                st.image(img_path, width=512, use_column_width="auto")
