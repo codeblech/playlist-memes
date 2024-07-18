@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import os
 from PIL import Image
+from PIL.Image import Resampling
 from io import BytesIO
 import regex
 
@@ -41,6 +42,7 @@ def get_ytmusic_thumbnail(url: str) -> str | None:
 
         with Image.open(BytesIO(rr.content)) as im:
             try:
+                im.resize((512,512), Resampling.LANCZOS)
                 im.save(save_path, format="JPEG")
                 print(f"Saved thumbnail to {save_path}")
                 return save_path
