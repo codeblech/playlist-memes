@@ -6,7 +6,11 @@ This is a meme generator. Paste the links of you favourite songs, and generate l
 
 https://batman.streamlit.app/
 
+
+
 # How to add more templates?
+> [!TIP]
+> Video tutorials are present in `tutorials/`
 
 > [!NOTE]
 > You should have GIMP installed
