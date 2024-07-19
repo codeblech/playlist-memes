@@ -14,7 +14,7 @@ https://batman.streamlit.app/
 
 > [!NOTE]
 > You should have GIMP installed
-> If you're using some other image as template, it must be 512x512 pixels, beacause that's the size of YTMusic Thumnnails. If your overlay in differently sized, change it's size first, then proceed further.
+> If you're using some other image as template, it must be 512x512 pixels, beacause that's the size of YTMusic Thumbnails. If your overlay in differently sized, change it's size first, then proceed further.
 
 ### one overlay without mask
 
