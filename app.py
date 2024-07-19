@@ -10,7 +10,7 @@ n = st.slider("Number of cover arts", min_value=1, max_value=5, value=1, step=1)
 
 urls = []
 for i in range(n):
-    if url := st.text_input(label=f"YTMusic URL of song {i+1}"):
+    if url := st.text_input(label=f"YTMusic URL of song/playlist {i+1}"):
         urls.append(url)
 
 
