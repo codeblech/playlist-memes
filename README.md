@@ -1,6 +1,6 @@
-# WTF is this
+# WTF is this?
 
-This is a meme generator. Paste the links of you favourite songs, and generate loads of memes in one click.
+This is a meme generator. Paste the links of your favourite songs and generate loads of memes with one click.
 
 # Hosted at
 
@@ -14,7 +14,7 @@ https://batman.streamlit.app/
 
 > [!NOTE]
 > You should have GIMP installed
-> If you're using some other image as template, it must be 512x512 pixels, beacause that's the size of YTMusic Thumbnails. If your overlay in differently sized, change it's size first, then proceed further.
+> If you're using some other image as a template, it must be 512x512 pixels, because that's the size of YTMusic Thumbnails. If your overlay in differently sized, change it's size first, then proceed further.
 
 ### one overlay without mask
 
