@@ -10,7 +10,7 @@ https://batman.streamlit.app/
 
 # How to add more templates?
 > [!TIP]
-> Video tutorials are present in `tutorials/`
+> Video tutorials are present in `tutorial/`
 
 > [!NOTE]
 > You should have GIMP installed
