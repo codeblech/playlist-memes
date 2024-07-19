@@ -42,7 +42,7 @@ def get_ytmusic_thumbnail(url: str) -> str | None:
 
         with Image.open(BytesIO(rr.content)) as im:
             try:
-                im.resize((512,512), Resampling.LANCZOS)
+                im = im.resize((512,512), Resampling.LANCZOS)
                 print("resized thumbnail image")
                 im.save(save_path, format="JPEG")
                 print(f"Saved thumbnail to {save_path}")
