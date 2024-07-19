@@ -18,7 +18,7 @@ https://batman.streamlit.app/
 
 ### one overlay without mask
 
-- Open your template(background) image and this sample overlay image in GIMP
+- Open your template(background) image and [this](https://github.com/codeblech/playlist-memes/blob/main/meta.json) sample overlay image in GIMP
 - Drag and drop the overlay layer onto the template image
 - Make sure the paste offset is (0,0), i.e. upper left corner of the overlay layer overlaps the upper left corner
   of the background image.
@@ -39,7 +39,7 @@ https://batman.streamlit.app/
 
 ### more than one overlay without mask
 
-- Open your template(background) image and this sample overlay image in GIMP
+- Open your template(background) image and [this](https://github.com/codeblech/playlist-memes/blob/main/meta.json) sample overlay image in GIMP
 - Drag and drop the overlay layer onto the template image
 - Make sure the paste offset is (0,0), i.e. upper left corner of the overlay layer overlaps the upper left corner
   of the background image.
@@ -60,7 +60,7 @@ https://batman.streamlit.app/
 
 ### one overlay with mask
 
-- Open your template(background) image and this sample overlay image in GIMP
+- Open your template(background) image and [this](https://github.com/codeblech/playlist-memes/blob/main/meta.json) sample overlay image in GIMP
 - Drag and drop the overlay layer onto the template image
 - Make sure the paste offset is (0,0), i.e. upper left corner of the overlay layer overlaps the upper left corner
   of the background image.
