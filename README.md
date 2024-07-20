@@ -26,7 +26,7 @@ https://batman.streamlit.app/
 - When you're done, copy the Transform Matrix.
 - Paste the matrix into the metadata json file, and change it according to your own metadata
 > [!NOTE]
-> Use [this](https://github.com/codeblech/playlist-memes/blob/main/meta.json) sample metadata file fir reference.
+> Use [this](https://github.com/codeblech/playlist-memes/blob/main/meta.json) sample metadata file for reference.
 - Add/Change the key `has_mask` to `false` in metadata json file
 - use the script `pcp.py` to add a text chunk with the metadata to the template(background) image
   `python pcp.py addtextchunk <template-path> <metadata-json-file-path>`
