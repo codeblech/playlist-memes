@@ -4,7 +4,7 @@ from rich.pretty import pprint
 from PIL import Image
 from PIL.PngImagePlugin import PngInfo
 import json
-from typing_extensions import Annotated
+from typing import Annotated
 from datetime import datetime
 
 app = typer.Typer()
