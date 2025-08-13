@@ -2,20 +2,26 @@ import streamlit as st
 import os
 from maker import apply_overlay_transformation, apply_overlay_transformation_v2
 from ytmusic_thumbnail import get_ytmusic_thumbnail
+from thumbnail import get_thumbnail
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 st.set_page_config(page_title="Music Memes", page_icon=":headphones:", layout="wide")
 st.title("Music Memes")
-
+st.info("Move the slider to select the number of URLs you want to input.")
 n = st.slider("Number of cover arts", min_value=1, max_value=5, value=1, step=1)
 
 urls = []
 for i in range(n):
-    if url := st.text_input(label=f"YTMusic URL of song/playlist {i+1}"):
+    if url := st.text_input(label=f"YTMusic/YouTube/Spotify URL of the song ({i+1})"):
         urls.append(url)
 
 
 if st.button(label="Generate Memes", disabled=len(urls) != n, type="primary"):
-    overlay_paths = [path for url in urls if (path := get_ytmusic_thumbnail(url)) is not None]
+    overlay_paths = [path for url in urls if (path := get_thumbnail(url)) is not None]
     print(overlay_paths)
     backgrounds_directory = os.path.join("assets", "background", str(n))
     print(backgrounds_directory)

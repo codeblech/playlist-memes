@@ -296,9 +296,11 @@ dependencies = [
     { name = "beautifulsoup4" },
     { name = "lxml" },
     { name = "pillow" },
+    { name = "python-dotenv" },
     { name = "regex" },
     { name = "rich" },
     { name = "scikit-image" },
+    { name = "spotipy" },
     { name = "streamlit" },
     { name = "typer" },
 ]
@@ -308,9 +310,11 @@ requires-dist = [
     { name = "beautifulsoup4", specifier = ">=4.13.4" },
     { name = "lxml", specifier = ">=6.0.0" },
     { name = "pillow", specifier = ">=11.3.0" },
+    { name = "python-dotenv", specifier = ">=1.1.1" },
     { name = "regex", specifier = ">=2025.7.34" },
     { name = "rich", specifier = ">=14.1.0" },
     { name = "scikit-image", specifier = ">=0.25.2" },
+    { name = "spotipy", specifier = ">=2.25.1" },
     { name = "streamlit", specifier = ">=1.48.0" },
     { name = "typer", specifier = ">=0.16.0" },
 ]
@@ -547,12 +551,30 @@ wheels = [
 ]
 
 [[package]]
+name = "python-dotenv"
+version = "1.1.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f6/b0/4bc07ccd3572a2f9df7e6782f52b0c6c90dcbb803ac4a167702d7d0dfe1e/python_dotenv-1.1.1.tar.gz", hash = "sha256:a8a6399716257f45be6a007360200409fce5cda2661e3dec71d23dc15f6189ab", size = 41978 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/5f/ed/539768cf28c661b5b068d66d96a2f155c4971a5d55684a514c1a0e0dec2f/python_dotenv-1.1.1-py3-none-any.whl", hash = "sha256:31f23644fe2602f88ff55e1f5c79ba497e01224ee7737937930c448e4d0e24dc", size = 20556 },
+]
+
+[[package]]
 name = "pytz"
 version = "2025.2"
 source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/f8/bf/abbd3cdfb8fbc7fb3d4d38d320f2441b1e7cbe29be4f23797b4a2b5d8aac/pytz-2025.2.tar.gz", hash = "sha256:360b9e3dbb49a209c21ad61809c7fb453643e048b38924c765813546746e81c3", size = 320884 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/81/c4/34e93fe5f5429d7570ec1fa436f1986fb1f00c3e0f43a589fe2bbcd22c3f/pytz-2025.2-py2.py3-none-any.whl", hash = "sha256:5ddf76296dd8c44c26eb8f4b6f35488f3ccbf6fbbd7adee0b7262d43f0ec2f00", size = 509225 },
+]
+
+[[package]]
+name = "redis"
+version = "6.4.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/0d/d6/e8b92798a5bd67d659d51a18170e91c16ac3b59738d91894651ee255ed49/redis-6.4.0.tar.gz", hash = "sha256:b01bc7282b8444e28ec36b261df5375183bb47a07eb9c603f284e89cbc5ef010", size = 4647399 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e8/02/89e2ed7e85db6c93dfa9e8f691c5087df4e3551ab39081a4d7c6d1f90e05/redis-6.4.0-py3-none-any.whl", hash = "sha256:f0544fa9604264e9464cdf4814e7d4830f74b165d52f2a330a760a88dd248b7f", size = 279847 },
 ]
 
 [[package]]
@@ -803,6 +825,20 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/3f/f4/4a80cd6ef364b2e8b65b15816a843c0980f7a5a2b4dc701fc574952aa19f/soupsieve-2.7.tar.gz", hash = "sha256:ad282f9b6926286d2ead4750552c8a6142bc4c783fd66b0293547c8fe6ae126a", size = 103418 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e7/9c/0e6afc12c269578be5c0c1c9f4b49a8d32770a080260c333ac04cc1c832d/soupsieve-2.7-py3-none-any.whl", hash = "sha256:6e60cc5c1ffaf1cebcc12e8188320b72071e922c2e897f737cadce79ad5d30c4", size = 36677 },
+]
+
+[[package]]
+name = "spotipy"
+version = "2.25.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "redis" },
+    { name = "requests" },
+    { name = "urllib3" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/18/22/d900e55cfdd489ecdacf560aea4618848893fcbab4433bf62d0d731fa030/spotipy-2.25.1.tar.gz", hash = "sha256:607d3c43722b7e217a7e6c82f17258b798b92a512017d60c06323d62ae814cd7", size = 44432 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/bd/3b/dde90e39c456f0d72397afd49d433f95c6a2fdbdcd829bcfc38cdbf6949a/spotipy-2.25.1-py3-none-any.whl", hash = "sha256:18f47d9a0594ced8001b3baa5a4160ea6dcf570abbdad371971f475a81892844", size = 31331 },
 ]
 
 [[package]]
