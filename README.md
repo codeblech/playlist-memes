@@ -2,6 +2,9 @@
 
 This is a meme generator. Paste the links of your favourite songs and generate loads of memes with one click.
 <img src="https://github.com/user-attachments/assets/90606cb4-a996-4c8c-86fb-82ad2edd490d" width="777">
+> [!Note]
+> This was made way before generative AI could do this. There's no AI here, only affine and perspective transformations with clever use of the PNG file format.
+
 # Hosted at
 
 https://batman.streamlit.app/
